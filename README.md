@@ -27,4 +27,5 @@ To build the consumer image run the below command.
 
 Finally you want to push the images to a image registry like docker hub or GCR that’s accessible by your cluster.
 
-Credits: ChamilaLiyanage
+**Credits: ChamilaLiyanage
+**
