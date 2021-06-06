@@ -1,21 +1,33 @@
-apiVersion: keda.k8s.io/v1alpha1
+apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: kafka-scaledobject
-  namespace: keda
-  labels:
-    deploymentName: kafka-consumer-deployment # Required Name of the deployment we want to scale.
+  namespace: default
 spec:
   scaleTargetRef:
-    deploymentName: kafka-consumer-deployment # Required Name of the deployment we want to scale.
-  pollingInterval: 5
-  minReplicaCount: 1   #Optional Default 0
-  maxReplicaCount: 10  #Optional Default 100
+    name: kafka-consumer-deployment
+  pollingInterval: 10
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 16
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleUp:
+          stabilizationWindowSeconds: 0
+          policies:
+          - type: Percent
+            value: 50
+            periodSeconds: 60
+          - type: Pods
+            value: 3
+            periodSeconds: 60
+          selectPolicy: Max
   triggers:
   - type: kafka
     metadata:
-      # Required
-      brokerList: 192.168.1.4:9092 # Kafka bootstrap server host and port
-      consumerGroup: order-shipper  # Make sure that this consumer group name is the same one as the one that is consuming topics
-      topic: test
-      lagThreshold: "10" # Optional. How much the stream is lagging on the current consumer group
+      bootstrapServers: 10.60.10.253:9092  # Kafka bootstrap server host and port
+      consumerGroup: order-shipper # Make sure that this consumer group name is the same one as the one that is consuming topics
+      topic: keda-kafka-poc #Name of the topic from which the consumer consumes message.
+      lagThreshold: "20" #The lag threshold over which the scaler with scale out the deployments.
+      offsetResetPolicy: earliest
