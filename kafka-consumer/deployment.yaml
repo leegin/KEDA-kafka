@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka-consumer-deployment
+  namespace: keda
   labels:
     app: kafka-consumer
 spec:
@@ -20,6 +21,6 @@ spec:
           imagePullPolicy: Never
           env:
             - name: KAFKA_BOOTSTRAP_SERVER
-              value: "192.168.1.7:9092"
+              value: "10.60.10.253:9092"
             - name: KAFKA_ORDERS_TOPIC
-              value: "test"
+              value: "keda-kafka-poc"

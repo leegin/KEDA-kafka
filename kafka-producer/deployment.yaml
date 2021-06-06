@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka-producer-deployment
+  namespace: keda
   labels:
     app: kafka-producer
 spec:
@@ -22,14 +23,15 @@ spec:
             - containerPort: 8090
           env:
             - name: KAFKA_BOOTSTRAP_SERVER
-              value: "192.168.1.11:9092"
+              value: "10.60.10.253:9092"
             - name: KAFKA_ORDERS_TOPIC
-              value: "test"
+              value: "keda-kafka-poc"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: kafka-producer-svc
+  namespace: keda
   labels:
     app: kafka-producer
 spec:
