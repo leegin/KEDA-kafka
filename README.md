@@ -24,3 +24,5 @@ To build the producer image run the below command.
 To build the consumer image run the below command.
 
 ```docker build -t kafka-consumer kafka-consumer/```
+
+Finally you want to push the images to a image registry like docker hub or GCR that’s accessible by your cluster.
